@@ -5,14 +5,16 @@ import { SortProps } from "./types"
 
 const SortButtons = ({ sort, order }: SortProps) => {
   const sortBtn = "btn btn-sm btn-neutral mx-2 "
+  const btnRowWrapper = "inline-flex items-center me-8"
+
+  const router = useRouter()
+
   const isActive = (option: string) => {
     if (sort === option || order === option) {
       return "btn-active"
     }
     return "btn-outline"
   }
-  const btnRowWrapper = "inline-flex items-center me-8"
-  const router = useRouter()
 
   const updateQueryParams = (newSort: string, newOrder: string) => {
     // Reset ordering if new sort option is used
@@ -21,6 +23,7 @@ const SortButtons = ({ sort, order }: SortProps) => {
     }
     router.push(`/users?sort=${newSort}&order=${newOrder}`)
   }
+
   return (
     <div className="my-4">
       <div className={btnRowWrapper}>

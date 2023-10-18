@@ -2,9 +2,9 @@ import AddNewUserButton from "@/app/users/AddNewUserButton"
 import { getAllUsers } from "@/services/users"
 import { NextPage } from "next"
 import SortButtons from "./SortButtons"
-import { SortProps, User } from "./types"
+import { OrderOptions, SortOptions, SortProps, User } from "./types"
 import UserCard from "./UserCard"
-import { sort as fastSort } from "fast-sort"
+import { ISortByObjectSorter, sort as fastSort } from "fast-sort"
 
 interface Props {
   searchParams: SortProps
@@ -27,8 +27,8 @@ const Users: NextPage<Props> = async ({
 
   users = fastSort(users).by([
     {
-      [order]: (u: User) => u[sort],
-    } as any,
+      [order as OrderOptions]: (u: User) => u[sort as SortOptions],
+    } as unknown as ISortByObjectSorter<User>,
   ])
 
   return (
