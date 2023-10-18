@@ -1,5 +1,4 @@
 import AddNewUserButton from "@/app/users/AddNewUserButton"
-import { getAllUsers } from "@/services/users"
 import { NextPage } from "next"
 import SortButtons from "./SortButtons"
 import { OrderOptions, SortOptions, SortProps, User } from "./types"
