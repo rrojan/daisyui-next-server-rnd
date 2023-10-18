@@ -4,6 +4,8 @@ import SortButtons from "./SortButtons"
 import { OrderOptions, SortOptions, SortProps, User } from "./types"
 import UserCard from "./UserCard"
 import { ISortByObjectSorter, sort as fastSort } from "fast-sort"
+import { Suspense } from "react"
+import UsersLoading from "./UsersLoading"
 
 interface Props {
   searchParams: SortProps
@@ -34,11 +36,13 @@ const Users: NextPage<Props> = async ({
     <div className="px-8 py-16 mx-16">
       <h1>All Users</h1>
       <SortButtons sort={sort} order={order} />
-      <ul className="flex flex-wrap gap-10 mt-6 mb-10">
-        {users.map((user) => (
-          <UserCard key={user.id} user={user} />
-        ))}
-      </ul>
+      <Suspense fallback={<UsersLoading />}>
+        <ul className="flex flex-wrap gap-10 mt-6 mb-10">
+          {users.map((user) => (
+            <UserCard key={user.id} user={user} />
+          ))}
+        </ul>
+      </Suspense>
       <AddNewUserButton />
     </div>
   )
