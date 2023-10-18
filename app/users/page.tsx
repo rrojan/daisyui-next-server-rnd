@@ -32,7 +32,7 @@ const Users: NextPage<Props> = async ({
 
   return (
     <div className="px-8 py-16 mx-16">
-      <h1 className="text-5xl">All Users</h1>
+      <h1>All Users</h1>
       <SortButtons sort={sort} order={order} />
       <ul className="flex flex-wrap gap-10 mt-6 mb-10">
         {users.map((user) => (
