@@ -2,13 +2,11 @@ import data from "@/app/api/data/users.json"
 import { updateJsonStore } from "../utils/json"
 import { User } from "@/app/shared/types"
 
-const usersList: User[] = data
-
-export const fetchAllUsers = (): User[] => usersList
+export const fetchAllUsers = (): User[] => data as User[]
 
 export const createUser = (body: User) => {
   const usersList = fetchAllUsers()
-  const latestId = usersList[usersList.length - 1].id
+  const latestId = usersList[usersList.length - 1]?.id || 0
   usersList.push({
     ...body,
     id: latestId + 1,
@@ -18,7 +16,7 @@ export const createUser = (body: User) => {
 }
 
 export const findUserById = (id: number): User | undefined =>
-  (usersList as User[]).find((user) => user.id === +id)
+  (data as User[]).find((user) => user.id === +id)
 
 export const updateUserById = (id: number, body: User): boolean => {
   let isUserUpdated = false
@@ -36,13 +34,15 @@ export const updateUserById = (id: number, body: User): boolean => {
 
 export const deleteUserById = (id: number): boolean => {
   const usersList = fetchAllUsers()
-  let isUserDeleted = false
-  usersList.map((user, i) => {
-    if (user.id === +id) {
-      delete usersList[i]
-      isUserDeleted = true
-    }
-  })
-  updateJsonStore("users", usersList)
-  return isUserDeleted
+  const matchIndex = usersList.findIndex((user) => user.id === id)
+  console.log("-----------------", matchIndex)
+  if (matchIndex >= 0) {
+    // TODO: Use immer
+    updateJsonStore("users", [
+      ...usersList.slice(0, matchIndex),
+      ...usersList.slice(matchIndex + 1, usersList.length),
+    ])
+    return true
+  }
+  return false
 }

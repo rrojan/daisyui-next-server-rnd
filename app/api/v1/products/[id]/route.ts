@@ -49,8 +49,5 @@ export const DELETE = (request: NextRequest, { params: { id } }: Props) => {
   if (!deleteOneProductById(+id)) {
     return NextResponse.json({ message: "Product not found" }, { status: 404 })
   }
-  return NextResponse.json(
-    { message: "Product deleted successfully " },
-    { status: 204 }
-  )
+  return NextResponse.json({ status: 204 })
 }

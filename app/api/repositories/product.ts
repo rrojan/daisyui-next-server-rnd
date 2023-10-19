@@ -6,9 +6,10 @@ export const fetchAllProducts = (): Product[] => data
 
 export const createProduct = (newProductData: Product) => {
   const productsList = fetchAllProducts()
+  const latestId = productsList[productsList.length]?.id || 0
   productsList.push({
     ...newProductData,
-    id: productsList[productsList.length].id + 1,
+    id: latestId + 1,
   })
   updateJsonStore("products", productsList)
 }
@@ -34,13 +35,13 @@ export const updateOneProductById = (
 
 export const deleteOneProductById = (id: number): boolean => {
   const productsList = fetchAllProducts()
-  let isProductDeleted = false
-  productsList.map((user, i) => {
-    if (user.id === +id) {
-      delete productsList[i]
-      isProductDeleted = true
-    }
-  })
-  updateJsonStore("products", productsList)
-  return isProductDeleted
+  const matchIndex = productsList.findIndex((user) => user.id === id)
+  if (matchIndex >= 0) {
+    updateJsonStore("products", [
+      ...productsList.slice(0, matchIndex),
+      ...productsList.slice(matchIndex + 1, productsList.length),
+    ])
+    return true
+  }
+  return false
 }

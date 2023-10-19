@@ -49,8 +49,5 @@ export const DELETE = (request: NextRequest, { params: { id } }: Props) => {
   if (!deleteUserById(+id)) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
-  return NextResponse.json(
-    { message: "User deleted successfully" },
-    { status: 204 }
-  )
+  return NextResponse.json({ status: 204 })
 }
