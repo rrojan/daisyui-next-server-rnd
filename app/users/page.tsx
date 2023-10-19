@@ -14,10 +14,10 @@ interface Props {
 const Users: NextPage<Props> = async ({
   searchParams: { sort, order },
 }: Props) => {
-  const resp = await fetch("https://jsonplaceholder.typicode.com/users", {
+  const resp = await fetch("http://localhost:3000/api/v1/users", {
     cache: "no-store",
   })
-  let users: User[] = await resp.json()
+  let users: User[] = (await resp.json()).data
 
   if (!sort) {
     sort = "name"
@@ -28,7 +28,7 @@ const Users: NextPage<Props> = async ({
 
   users = fastSort(users).by([
     {
-      [order as OrderOptions]: (u: User) => u[sort as SortOptions],
+      [order]: (u: User) => u[sort],
     } as unknown as ISortByObjectSorter<User>,
   ])
 
@@ -38,7 +38,7 @@ const Users: NextPage<Props> = async ({
       <SortButtons sort={sort} order={order} />
       <Suspense fallback={<UsersLoading />}>
         <ul className="flex flex-wrap gap-10 mt-6 mb-10">
-          {users.map((user) => (
+          {users?.map((user) => (
             <UserCard key={user.id} user={user} />
           ))}
         </ul>

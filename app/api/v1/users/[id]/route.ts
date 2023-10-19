@@ -1,9 +1,9 @@
+import { createUpdateUserDTO } from "@/app/api/dtos/user"
 import {
   deleteUserById,
   findUserById,
   updateUserById,
 } from "@/app/api/repositories/user"
-import { isValidUser } from "@api/utils/users"
 import { NextRequest, NextResponse } from "next/server"
 
 interface Props {
@@ -26,8 +26,12 @@ export const GET = (request: NextRequest, { params: { id } }: Props) => {
 export const PUT = async (request: NextRequest, { params: { id } }: Props) => {
   const body = await request.json()
 
-  if (!isValidUser(body)) {
-    return NextResponse.json({ error: "Invalid user data" }, { status: 400 })
+  const validation = createUpdateUserDTO.safeParse(body)
+  if (!validation.success) {
+    return NextResponse.json(
+      { message: "Invalid user data", errors: validation.error.errors },
+      { status: 400 }
+    )
   }
 
   if (!updateUserById(+id, body)) {
