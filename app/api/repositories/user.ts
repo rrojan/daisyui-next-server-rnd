@@ -4,7 +4,6 @@ import { updateUsersJson } from "../utils/users"
 
 const usersList: User[] = data
 
-// TODO: Move data fns to repo
 export const fetchAllUsers = (): User[] => usersList
 
 export const findUserById = (id: number): User | undefined =>
