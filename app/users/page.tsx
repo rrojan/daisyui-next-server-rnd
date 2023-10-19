@@ -1,11 +1,12 @@
 import AddNewUserButton from "@/app/users/AddNewUserButton"
 import { NextPage } from "next"
 import SortButtons from "./SortButtons"
-import { OrderOptions, SortOptions, SortProps, User } from "./types"
+import { SortProps } from "./types"
 import UserCard from "./UserCard"
 import { ISortByObjectSorter, sort as fastSort } from "fast-sort"
 import { Suspense } from "react"
 import UsersLoading from "./UsersLoading"
+import { User } from "../shared/types"
 
 interface Props {
   searchParams: SortProps

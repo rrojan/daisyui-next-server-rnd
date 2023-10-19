@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
-import { updateUsersJson } from "../../utils/users"
-import { fetchAllUsers } from "../../repositories/user"
-import { createUpdateUserDTO } from "../../dtos/user"
+import { updateJsonStore } from "../../utils/json"
+import { createUser, fetchAllUsers } from "../../repositories/user"
+import { createUpdateUserSchema } from "../../schemas/user"
+import { createProduct } from "../../repositories/product"
+import { User } from "@/app/shared/types"
 
 export const GET = (request: NextRequest) => {
   return NextResponse.json({
@@ -10,11 +12,9 @@ export const GET = (request: NextRequest) => {
 }
 
 export const POST = async (request: NextRequest) => {
-  const usersList = fetchAllUsers()
-  const latestId = usersList[usersList.length - 1].id
-  const body = await request.json()
+  const body: User = await request.json()
 
-  const validation = createUpdateUserDTO.safeParse(body)
+  const validation = createUpdateUserSchema.safeParse(body)
   if (!validation.success) {
     return NextResponse.json(
       { message: "Something went wrong", errors: validation.error.errors },
@@ -22,14 +22,7 @@ export const POST = async (request: NextRequest) => {
     )
   }
 
-  usersList.push({
-    id: latestId + 1,
-    username: body.username,
-    name: body.name,
-    email: body.email,
-  })
-
-  updateUsersJson(usersList)
+  createUser(body)
   return NextResponse.json(
     { data: "New user created successfully" },
     { status: 201 }

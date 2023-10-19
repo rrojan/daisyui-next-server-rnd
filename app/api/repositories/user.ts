@@ -1,10 +1,21 @@
-import { User } from "@/app/users/types"
 import data from "@/app/api/data/users.json"
-import { updateUsersJson } from "../utils/users"
+import { updateJsonStore } from "../utils/json"
+import { User } from "@/app/shared/types"
 
 const usersList: User[] = data
 
 export const fetchAllUsers = (): User[] => usersList
+
+export const createUser = (body: User) => {
+  const usersList = fetchAllUsers()
+  const latestId = usersList[usersList.length - 1].id
+  usersList.push({
+    ...body,
+    id: latestId + 1,
+  })
+
+  updateJsonStore("users", usersList)
+}
 
 export const findUserById = (id: number): User | undefined =>
   (usersList as User[]).find((user) => user.id === +id)
@@ -18,7 +29,7 @@ export const updateUserById = (id: number, body: User): boolean => {
       isUserUpdated = true
     }
   })
-  updateUsersJson(usersList)
+  updateJsonStore("users", usersList)
 
   return isUserUpdated
 }
@@ -32,6 +43,6 @@ export const deleteUserById = (id: number): boolean => {
       isUserDeleted = true
     }
   })
-  updateUsersJson(usersList)
+  updateJsonStore("users", usersList)
   return isUserDeleted
 }
