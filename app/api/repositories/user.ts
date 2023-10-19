@@ -35,7 +35,6 @@ export const updateUserById = (id: number, body: User): boolean => {
 export const deleteUserById = (id: number): boolean => {
   const usersList = fetchAllUsers()
   const matchIndex = usersList.findIndex((user) => user.id === id)
-  console.log("-----------------", matchIndex)
   if (matchIndex >= 0) {
     // TODO: Use immer
     updateJsonStore("users", [
